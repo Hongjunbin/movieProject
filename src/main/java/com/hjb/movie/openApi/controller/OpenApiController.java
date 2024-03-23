@@ -1,28 +1,25 @@
 package com.hjb.movie.openApi.controller;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.hjb.movie.openApi.service.OpenApiService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-@Controller
+@RestController
 public class OpenApiController {
 
-    @GetMapping( "/getMovieInfo" )
+    private final OpenApiService openApiService;
+
+    @Autowired
+    OpenApiController(OpenApiService openApiService) {
+        this.openApiService = openApiService;
+    }
+
+    @RequestMapping( value = "/getMovieInfo" , method = RequestMethod.GET )
     public void getMovieInfoList() throws IOException {
-
-        HttpClient hc = new HttpClient();
-
-        GetMethod getMethod = new GetMethod("https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json");
-        getMethod.setQueryString("key=e08881edc3158fd8194585483c48e21e");
-
-        hc.executeMethod( getMethod );
-
-        String responseBodyAsString = getMethod.getResponseBodyAsString();
-
-        System.out.println(responseBodyAsString);
-
+        this.openApiService.callOpenApi();
     }
 
 }
